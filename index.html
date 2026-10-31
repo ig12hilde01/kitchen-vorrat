@@ -1230,11 +1230,18 @@ textarea.form-input { min-height: 80px; resize: vertical; }
     <!-- ═══ SECTION 5: EINKAUFSVERZEICHNIS — PIATTO STYLE ═══ -->
     <div class="section" id="sec-shopping">
       <div class="section-header">
-        <h2>Einkaufsliste</h2>
+        <h2>Einkaufen</h2>
         <button class="action-btn" id="clearShopping">Alle löschen</button>
       </div>
 
-      <!-- Household size selector -->
+      <!-- Sub-Tabs -->
+      <div class="sub-tabs">
+        <button class="sub-tab active" data-section="sec-shopping" onclick="showSubSection('sec-shopping')">Liste</button>
+        <button class="sub-tab" data-section="sec-weekplan" onclick="showSubSection('sec-weekplan')">Wochenplan</button>
+        <button class="sub-tab" data-section="sec-stores" onclick="showSubSection('sec-stores')">Märkte</button>
+      </div>
+
+      <!-- Household size -->
       <div class="card" style="padding:12px 14px;">
         <div style="font-size:13px; color:var(--text-secondary); font-weight:600; margin-bottom:8px; text-transform:uppercase; letter-spacing:0.5px;">
           <i class="fas fa-users" style="margin-right:4px;"></i> Haushaltsgröße
@@ -1574,7 +1581,14 @@ textarea.form-input { min-height: 80px; resize: vertical; }
 
     <!-- ═══ SECTION 10: EINSTELLUNGEN ═══ -->
     <div class="section" id="sec-settings">
-      <div class="section-header"><h2>Einstellungen</h2></div>
+      <div class="section-header"><h2>Mehr</h2></div>
+
+      <!-- Sub-Tabs -->
+      <div class="sub-tabs">
+        <button class="sub-tab active" data-section="sec-settings" onclick="showSubSection('sec-settings')">Settings</button>
+        <button class="sub-tab" data-section="sec-recipes-manage" onclick="showSubSection('sec-recipes-manage')">Rezepte</button>
+        <button class="sub-tab" data-section="sec-prices" onclick="showSubSection('sec-prices')">Preise</button>
+      </div>
 
       <div class="settings-group">
         <div class="sg-title">Daten</div>
