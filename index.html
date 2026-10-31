@@ -2179,7 +2179,7 @@ function checkPw() {
 }
 if (localStorage.getItem('kv_pw_auth') === 'true') {
   document.getElementById('pw-gate').style.display = 'none';
-  init();
+  init(true); // Skip refreshAll für schnellere Ladezeit
 }</script>
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -3633,9 +3633,9 @@ function refreshAll() {
 // ═══════════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════════
-function init() {
+function init(skipRefresh) {
   loadProducts(); // seed data
-  refreshAll();
+  if (!skipRefresh) refreshAll();
   // Set today for modal bought date
   const mb = document.getElementById('modalBought');
   if (mb) mb.value = new Date().toISOString().split('T')[0];
