@@ -1093,6 +1093,168 @@ textarea.form-input { min-height: 80px; resize: vertical; }
 .br-scan-log .sl-name { flex: 1; font-size: 15px; }
 .br-scan-log .sl-date { font-size: 12px; color: var(--text-tertiary); }
 
+
+/* ═══════════════════════════════════════════════════════════
+   ─── PIATTO-STYLE: REZEPTE, WOCHENPLAN, SUPERMÄRKTE, PREISE ═══
+   ═══════════════════════════════════════════════════════════ */
+
+/* Sub-tab navigation within settings/shopping */
+.sub-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 4px;
+  background: var(--bg);
+  border-radius: var(--radius-md);
+}
+.sub-tab {
+  flex: 1;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all .15s ease;
+}
+.sub-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Sub-section visibility */
+/* Sub-sections: nur sichtbar wenn parent aktiv UND active */
+.sub-section { display: none !important; }
+.section:not(.sub-section).active { display: block !important; }
+.section.sub-section.active { display: block !important; }
+
+/* ═══ REZEPTE ═══ */
+.recipe-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 8px;
+  border-bottom: 0.5px solid var(--separator);
+}
+.recipe-card:last-child { border-bottom: none; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+.recipe-card:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.recipe-card:only-of-type { border-radius: var(--radius-md); }
+.recipe-card .rc-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.recipe-card .rc-emoji { font-size: 28px; }
+.recipe-card .rc-name { font-size: 17px; font-weight: 600; }
+.recipe-card .rc-meta { font-size: 13px; color: var(--text-secondary); }
+.recipe-card .rc-meta span { margin-right: 12px; }
+.recipe-card .rc-ingredients-preview { font-size: 13px; color: var(--text-tertiary); margin-top: 6px; }
+.recipe-card .rc-actions { display: flex; gap: 6px; margin-top: 10px; }
+.recipe-card .rc-actions .btn { flex: 1; padding: 8px 6px; font-size: 13px; }
+
+/* Rezept-Detail Modal */
+.recipe-detail { padding: 16px; }
+.recipe-detail .rd-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.recipe-detail .rd-emoji { font-size: 40px; }
+.recipe-detail .rd-name { font-size: 24px; font-weight: 700; }
+.recipe-detail .rd-meta { display: flex; gap: 16px; margin-bottom: 16px; font-size: 14px; color: var(--text-secondary); }
+.recipe-detail .rd-section-title { font-size: 15px; font-weight: 700; margin: 16px 0 8px; color: var(--text); }
+
+/* Ingredient list */
+.ri-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 0.5px solid var(--separator); }
+.ri-row:last-child { border-bottom: none; }
+.ri-check { width: 20px; height: 20px; border-radius: 4px; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .15s; }
+.ri-check.checked { background: var(--green); border-color: var(--green); }
+.ri-check.checked::after { content: ''; width: 5px; height: 9px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg) translate(-1px, -1px); }
+.ri-name { flex: 1; font-size: 15px; }
+.ri-qty { font-size: 13px; color: var(--text-secondary); }
+.ri-status { font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 12px; }
+.ri-status.available { background: rgba(52,199,89,.12); color: var(--green); }
+.ri-status.missing { background: rgba(255,59,48,.12); color: var(--red); }
+.ri-status.partial { background: rgba(255,149,0,.12); color: var(--orange); }
+
+/* Steps */
+.step-row { display: flex; gap: 10px; padding: 8px 0; }
+.step-num { width: 24px; height: 24px; border-radius: 50%; background: var(--bg); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+.step-text { font-size: 15px; line-height: 1.5; }
+
+/* ═══ WOCHENPLAN ═══ */
+.week-plan-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-bottom: 16px; }
+.week-day {
+  text-align: center;
+  padding: 8px 4px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .15s;
+}
+.week-day.today { background: rgba(0,122,255,.12); border: 1.5px solid var(--blue); }
+.week-day.selected { background: var(--blue); color: white; }
+.week-day .wd-name { font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--text-tertiary); }
+.week-day.today .wd-name, .week-day.selected .wd-name { color: inherit; }
+.week-day .wd-num { font-size: 18px; font-weight: 700; margin-top: 2px; }
+.week-day .wd-meal { font-size: 10px; color: var(--text-tertiary); margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.week-day.selected .wd-meal { color: rgba(255,255,255,.8); }
+
+.day-detail { margin-top: 12px; }
+.day-meal-row { display: flex; align-items: center; gap: 8px; padding: 10px 12px; background: var(--surface); border-bottom: 0.5px solid var(--separator); }
+.day-meal-row:last-child { border-bottom: none; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+.day-meal-row:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.day-meal-row:only-of-type { border-radius: var(--radius-md); }
+.day-meal-row .dm-type { font-size: 16px; }
+.day-meal-row .dm-name { flex: 1; font-size: 15px; }
+.day-meal-row .dm-time { font-size: 12px; color: var(--text-tertiary); }
+.day-meal-row .dm-add { background: none; border: none; color: var(--blue); font-size: 18px; cursor: pointer; padding: 4px; }
+
+/* ═══ SUPERMÄRKTE ═══ */
+.store-card {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 8px;
+}
+.store-card:last-child { border-bottom: none; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+.store-card:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.store-card:only-of-type { border-radius: var(--radius-md); }
+.store-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.store-emoji { font-size: 24px; }
+.store-name { font-size: 17px; font-weight: 600; }
+.store-dist { font-size: 13px; color: var(--text-secondary); }
+.store-offers { margin-top: 8px; }
+.store-offer { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 0.5px solid var(--separator); }
+.store-offer:last-child { border-bottom: none; }
+.store-offer .so-price { font-size: 15px; font-weight: 700; color: var(--green); }
+.store-offer .so-original { font-size: 13px; color: var(--text-tertiary); text-decoration: line-through; }
+.store-offer .so-discount { font-size: 12px; font-weight: 700; background: rgba(52,199,89,.15); color: var(--green); padding: 2px 6px; border-radius: 8px; }
+
+/* ═══ PREISVERGLEICH ═══ */
+.price-trend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: var(--surface);
+  border-bottom: 0.5px solid var(--separator);
+}
+.price-trend:last-child { border-bottom: none; border-radius: 0 0 var(--radius-md) var(--radius-md); }
+.price-trend:first-child { border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.price-trend:only-of-type { border-radius: var(--radius-md); }
+.pt-name { flex: 1; font-size: 15px; }
+.pt-chart { flex: 2; display: flex; align-items: flex-end; gap: 2px; height: 28px; }
+.pt-bar { flex: 1; background: var(--blue); border-radius: 2px 2px 0 0; min-width: 4px; transition: height .3s ease; }
+.pt-bar.highlight { background: var(--green); }
+.pt-price { font-size: 15px; font-weight: 600; min-width: 60px; text-align: right; }
+.pt-trend { font-size: 12px; min-width: 24px; }
+.pt-trend.up { color: var(--red); }
+.pt-trend.down { color: var(--green); }
+.pt-trend.stable { color: var(--gray); }
+
+/* Preis-Historie Tabelle */
+.price-history-table { width: 100%; font-size: 13px; }
+.price-history-table th { text-align: left; padding: 6px 4px; color: var(--text-secondary); font-weight: 600; border-bottom: 1px solid var(--separator); }
+.price-history-table td { padding: 6px 4px; border-bottom: 0.5px solid var(--separator); }
+</style>
+
 </style>
 
   <!-- External Libraries -->
@@ -4650,18 +4812,30 @@ function renderPriceHistoryFor(productName) {
 //  SUB-SECTION NAVIGATION
 // ═══════════════════════════════════════════════════════════
 function showSubSection(sectionId) {
-  // Hide all sections
+  // Parent section finden
+  const parentMap = {
+    'sec-weekplan': 'sec-shopping',
+    'sec-stores': 'sec-shopping',
+    'sec-recipes-manage': 'sec-settings',
+    'sec-prices': 'sec-settings'
+  };
+  const parentId = parentMap[sectionId];
+  
+  // Nur active Klasse togglen — CSS regelt Sichtbarkeit
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  // Show target
+  
+  if (parentId) {
+    const parent = document.getElementById(parentId);
+    if (parent) parent.classList.add('active');
+  }
+  
   const section = document.getElementById(sectionId);
   if (section) section.classList.add('active');
 
-  // Update sub-tabs
   document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
   const tab = document.querySelector(`.sub-tab[data-section="${sectionId}"]`);
   if (tab) tab.classList.add('active');
 
-  // Show back button for sub-sections
   const backBtn = document.getElementById('backBtn');
   if (backBtn) backBtn.style.display = 'flex';
 }
