@@ -3361,9 +3361,11 @@ function openScanner() {
   if (html5QrCode) {
     html5QrCode.stop().catch(() => {});
     html5QrCode.clear().catch(() => {});
+  currentCameraId = null;
     html5QrCode = null;
   }
 
+  let currentCameraId = null;
   html5QrCode = new Html5Qrcode("scanner-reader");
 
   Html5Qrcode.getCameras().then(cameras => {
@@ -3371,6 +3373,7 @@ function openScanner() {
       const backCamera = cameras.find(c => /back|rear|environment/i.test(c.label));
       const cameraId = backCamera ? backCamera.id : cameras[0].id;
       html5QrCode.start(cameraId, { fps: 10, qrbox: { width: 260, height: 260 } }, onScanSuccess, onScanFailure)
+        .then(() => { currentCameraId = cameraId; })
         .then(() => {})
         .catch(err => showScannerError('Kamera-Start fehlgeschlagen', err));
     } else {
@@ -3383,7 +3386,8 @@ function openScanner() {
 
 function closeScanner() {
   if (html5QrCode) {
-    html5QrCode.stop().then(() => { html5QrCode.clear().catch(() => {}); html5QrCode = null; })
+    html5QrCode.stop().then(() => { html5QrCode.clear().catch(() => {});
+  currentCameraId = null; html5QrCode = null; })
       .catch(() => {}).finally(() => { document.getElementById('scannerOverlay').classList.remove('visible'); });
   } else {
     document.getElementById('scannerOverlay').classList.remove('visible');
@@ -3394,31 +3398,21 @@ function switchCamera() {
   if (!html5QrCode) return;
   Html5Qrcode.getCameras().then(cameras => {
     if (!cameras || cameras.length < 2) { showToast('Nur eine Kamera verfügbar'); return; }
-    // Aktuelle cameraId aus der laufenden Config extrahieren
-    const currentId = html5QrCode.getConfig()?.cameraId || '';
-    // Nächste Kamera finden
     let nextIdx = 0;
     for (let i = 0; i < cameras.length; i++) {
-      if (cameras[i].id === currentId) {
+      if (cameras[i].id === currentCameraId) {
         nextIdx = (i + 1) % cameras.length;
         break;
       }
     }
     const nextId = cameras[nextIdx].id;
-    // Stopp und starte mit neuer Kamera
     html5QrCode.stop().then(() => {
-      return html5QrCode.start(
-        nextId,
-        { fps: 10, qrbox: { width: 260, height: 260 } },
-        onScanSuccess,
-        onScanFailure
-      );
-    }).then(() => { showToast('Kamera gewechselt ✅'); })
+      return html5QrCode.start(nextId, { fps: 10, qrbox: { width: 260, height: 260 } }, onScanSuccess, onScanFailure);
+    }).then(() => { currentCameraId = nextId; showToast('Kamera gewechselt ✅'); })
       .catch(err => { showToast('Kamera-Fehler: ' + (err.message || 'Unbekannt')); });
   }).catch(err => { showToast('Kamera-Fehler: ' + (err.message || 'Unbekannt')); });
 }
-
-function onScanSuccess(result) {
+onScanSuccess(result) {
   const now = Date.now();
   if (result === lastScanResult && (now - lastScanTime) < 3000) return;
   lastScanResult = result;
@@ -3432,7 +3426,8 @@ function onScanSuccess(result) {
   setTimeout(() => fb.classList.remove('visible'), 2000);
 
   if (html5QrCode) {
-    html5QrCode.stop().then(() => { html5QrCode.clear().catch(() => {}); html5QrCode = null; }).catch(() => {});
+    html5QrCode.stop().then(() => { html5QrCode.clear().catch(() => {});
+  currentCameraId = null; html5QrCode = null; }).catch(() => {});
   }
   processBarcode(result);
 }
