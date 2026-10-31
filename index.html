@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>KüchenVorrat</title>
@@ -2527,6 +2529,47 @@ textarea.form-input { min-height: 80px; resize: vertical; }
 </head>
 <body>
 
+<!-- ═══════════════ PASSWORD GATE ═══════════════ -->
+<div id="pw-gate" style="position:fixed;inset:0;background:var(--bg);z-index:100000;display:flex;align-items:center;justify-content:center;">
+  <div style="background:var(--surface);border-radius:var(--radius-xl);padding:32px;max-width:340px;width:90%;box-shadow:var(--shadow-md);text-align:center;">
+    <div style="font-size:48px;margin-bottom:12px;">🔒</div>
+    <h2 style="font-size:20px;font-weight:700;margin-bottom:8px;">Kitchen Vorrat</h2>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:20px;">Passwort eingeben</p>
+    <input type="password" class="form-input" id="pw-input" placeholder="Passwort" style="margin-bottom:12px;text-align:center;" onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="btn btn-primary btn-full" onclick="checkPw()" id="pw-submit">
+      <i class="fas fa-unlock"></i> Öffnen
+    </button>
+    <p id="pw-error" style="font-size:13px;color:var(--red);margin-top:12px;display:none;">Falsches Passwort</p>
+  </div>
+</div>
+
+<script>
+const PW_HASH = '{pw_hash}';
+const SALT = '{salt}';
+
+function checkPw() {{
+  const input = document.getElementById('pw-input').value;
+  if (!input) return;
+  const hash = CryptoJS.SHA256(input + SALT).toString();
+  if (hash === PW_HASH) {{
+    document.getElementById('pw-gate').style.display = 'none';
+    localStorage.setItem('kv_pw_auth', 'true');
+    init();
+  }} else {{
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+    document.getElementById('pw-input').focus();
+  }}
+}}
+
+// Wenn bereits auth, direkt weiter
+if (localStorage.getItem('kv_pw_auth') === 'true') {{
+  document.getElementById('pw-gate').style.display = 'none';
+  init();
+}}
+</script>
+
+
 <div class="app-shell">
 
   <!-- HEADER -->
@@ -3009,6 +3052,11 @@ textarea.form-input { min-height: 80px; resize: vertical; }
     <!-- ═══ SECTION 10: EINSTELLUNGEN ═══ -->
     <div class="section" id="sec-settings">
       <div class="section-header"><h2>Mehr</h2></div>
+<div style="padding:8px 16px;margin-bottom:12px;">
+  <button class="btn btn-secondary" onclick="logout()" style="width:100%;font-size:14px;">
+    <i class="fas fa-lock"></i> Abmelden
+  </button>
+</div>
 
       <!-- Sub-Tabs -->
       <div class="sub-tabs">
