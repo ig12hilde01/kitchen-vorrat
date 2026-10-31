@@ -1,0 +1,190 @@
+
+    <!-- ═══ SETTINGS: REZEPTE ═══ -->
+    <div class="section sub-section" id="sec-recipes-manage">
+      <div class="section-header">
+        <h2>Rezepte</h2>
+        <button class="action-btn" id="addRecipeBtn"><i class="fas fa-plus"></i> Neues Rezept</button>
+      </div>
+
+      <!-- Rezept-Suchleiste -->
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-input" id="recipeSearch" placeholder="Rezept suchen...">
+      </div>
+
+      <div id="recipeList"></div>
+    </div>
+
+    <!-- ═══ SETTINGS: PREISVERGLEICH ═══ -->
+    <div class="section sub-section" id="sec-prices">
+      <div class="section-header">
+        <h2>Preisvergleich</h2>
+      </div>
+
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" class="form-input" id="priceSearch" placeholder="Produkt suchen...">
+      </div>
+
+      <div class="list-section-title" style="margin:12px 0 8px;">
+        <i class="fas fa-chart-line" style="margin-right:4px;"></i> Preistrends
+      </div>
+      <div id="priceTrends" class="card"></div>
+
+      <div class="list-section-title" style="margin:16px 0 8px;">
+        <i class="fas fa-clock-rotate-left" style="margin-right:4px;"></i> Preis-Historie
+      </div>
+      <div id="priceHistory" class="card"></div>
+    </div>
+
+    <!-- ═══ SHOPPING: WOCHENPLAN ═══ -->
+    <div class="section sub-section" id="sec-weekplan">
+      <div class="section-header">
+        <h2>Wochenplan</h2>
+        <button class="action-btn" id="autoWeekPlan"><i class="fas fa-wand-magic-sparkles"></i> Auto-Plan</button>
+      </div>
+
+      <div class="week-plan-grid" id="weekPlanGrid"></div>
+
+      <div class="list-section-title" id="selectedDayTitle">
+        <i class="fas fa-calendar-day" style="margin-right:4px;"></i> Tagesplan
+      </div>
+      <div id="dayDetail" class="card"></div>
+
+      <!-- Zutaten-Check -->
+      <div class="list-section-title" style="margin-top:16px;">
+        <i class="fas fa-clipboard-check" style="margin-right:4px;"></i> Zutaten-Check für {{DAY}}
+      </div>
+      <div id="ingredientCheck" class="card"></div>
+    </div>
+
+    <!-- ═══ SHOPPING: SUPERMÄRKTE ═══ -->
+    <div class="section sub-section" id="sec-stores">
+      <div class="section-header">
+        <h2>Supermärkte & Angebote</h2>
+        <button class="action-btn" id="addStoreBtn"><i class="fas fa-plus"></i> Neuer Laden</button>
+      </div>
+
+      <div class="list-section-title" style="margin:8px 0 8px;">
+        <i class="fas fa-location-dot" style="margin-right:4px;"></i> Meine Läden
+      </div>
+      <div id="storeList" class="card"></div>
+
+      <div class="list-section-title" style="margin:16px 0 8px;">
+        <i class="fas fa-tags" style="margin-right:4px;"></i> Aktuelle Angebote sortiert nach Laden
+      </div>
+      <div id="storeOffersList" class="card"></div>
+    </div>
+
+    <!-- ═══ REZEPT-DETAIL MODAL ═══ -->
+    <div class="modal-backdrop" id="recipeDetailBackdrop" style="display:none;" onclick="closeRecipeDetail()">
+      <div class="modal-panel" style="max-height:85vh;overflow-y:auto;" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <button class="modal-close" id="recipeDetailClose"><i class="fas fa-arrow-left"></i> Zurück</button>
+          <span class="modal-title">Rezept</span>
+          <div style="width:60px;"></div>
+        </div>
+        <div class="recipe-detail" id="recipeDetailContent"></div>
+      </div>
+    </div>
+
+    <!-- ═══ REZEPT-ERSTELLEN/BEARBEITEN MODAL ═══ -->
+    <div class="modal-backdrop" id="recipeModalBackdrop" style="display:none;" onclick="closeRecipeModal()">
+      <div class="modal-panel" style="max-height:85vh;overflow-y:auto;width:94%;max-width:500px;" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <button class="modal-close" id="recipeModalClose"><i class="fas fa-arrow-left"></i> Zurück</button>
+          <span class="modal-title" id="recipeModalTitle">Neues Rezept</span>
+          <button class="modal-close" id="recipeModalSave" style="color:var(--blue);"><i class="fas fa-check"></i></button>
+        </div>
+        <div style="padding:0 16px 20px;">
+          <div class="form-group">
+            <label class="form-label">Name des Rezepts</label>
+            <input type="text" class="form-input" id="recipeName" placeholder="z.B. Spaghetti Bolognese">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Emoji / Icon</label>
+            <input type="text" class="form-input" id="recipeEmoji" placeholder="🍝" maxlength="4">
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">Küche</label>
+              <select class="form-input" id="recipeCuisine">
+                <option value="italienisch">🇮🇹 Italienisch</option>
+                <option value="asiatisch">🥡 Asiatisch</option>
+                <option value="deutsch">🇩🇪 Deutsch</option>
+                <option value="mediterran">🫒 Mediterran</option>
+                <option value="indisch">🍛 Indisch</option>
+                <option value="amerikanisch">🍔 Amerikanisch</option>
+                <option value="französisch">🇫🇷 Französisch</option>
+                <option value="sonstige">🍽️ Sonstige</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">Schwierigkeit</label>
+              <select class="form-input" id="recipeDifficulty">
+                <option value="einfach">Einfach</option>
+                <option value="mittel">Mittel</option>
+                <option value="fortgeschritten">Fortgeschritten</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">Zeit (Min.)</label>
+              <input type="number" class="form-input" id="recipeTime" placeholder="30" min="1" max="480">
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">Portionen</label>
+              <input type="number" class="form-input" id="recipeServings" placeholder="4" min="1" max="50">
+            </div>
+            <div class="form-group" style="flex:1;">
+              <label class="form-label">Kalorien</label>
+              <input type="number" class="form-input" id="recipeCalories" placeholder="500" min="0">
+            </div>
+          </div>
+
+          <!-- Zutaten -->
+          <div style="margin-top:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <label class="form-label" style="margin:0;">Zutaten</label>
+              <button class="btn btn-secondary" id="addIngredientBtn" style="padding:6px 12px;font-size:13px;">
+                <i class="fas fa-plus"></i> Zutat
+              </button>
+            </div>
+            <div id="recipeIngredients" style="margin-bottom:8px;"></div>
+          </div>
+
+          <!-- Schritte -->
+          <div style="margin-top:16px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+              <label class="form-label" style="margin:0;">Zubereitungsschritte</label>
+              <button class="btn btn-secondary" id="addStepBtn" style="padding:6px 12px;font-size:13px;">
+                <i class="fas fa-plus"></i> Schritt
+              </button>
+            </div>
+            <div id="recipeSteps" style="margin-bottom:8px;"></div>
+          </div>
+
+          <!-- Beschreibung -->
+          <div class="form-group" style="margin-top:16px;">
+            <label class="form-label">Notizen</label>
+            <textarea class="form-input" id="recipeNotes" rows="3" placeholder="Tipps, Variationen..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ZUTATEN-TO-SHOPPING MODAL ═══ -->
+    <div class="modal-backdrop" id="addPlanToShoppingBackdrop" style="display:none;" onclick="closeAddPlanToShopping()">
+      <div class="modal-panel" style="max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <button class="modal-close" onclick="closeAddPlanToShopping()"><i class="fas fa-times"></i></button>
+          <span class="modal-title">Zur Einkaufsliste</span>
+          <div style="width:60px;"></div>
+        </div>
+        <div style="padding:0 16px 20px;">
+          <p style="font-size:14px;color:var(--text-secondary);margin-bottom:12px;">Fehlt ein Rezept komplett zur Einkaufsliste?</p>
+          <div id="missingIngredientsList"></div>
+        </div>
+      </div>
+    </div>
