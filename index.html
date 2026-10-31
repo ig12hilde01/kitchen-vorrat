@@ -3394,13 +3394,26 @@ function switchCamera() {
   if (!html5QrCode) return;
   Html5Qrcode.getCameras().then(cameras => {
     if (!cameras || cameras.length < 2) { showToast('Nur eine Kamera verfügbar'); return; }
-    const currentConfig = html5QrCode.getConfig();
-    const currentId = currentConfig?.cameraId || '';
-    const nextIdx = (cameras.findIndex(c => c.id === currentId) + 1) % cameras.length;
+    // Aktuelle cameraId aus der laufenden Config extrahieren
+    const currentId = html5QrCode.getConfig()?.cameraId || '';
+    // Nächste Kamera finden
+    let nextIdx = 0;
+    for (let i = 0; i < cameras.length; i++) {
+      if (cameras[i].id === currentId) {
+        nextIdx = (i + 1) % cameras.length;
+        break;
+      }
+    }
     const nextId = cameras[nextIdx].id;
+    // Stopp und starte mit neuer Kamera
     html5QrCode.stop().then(() => {
-      return html5QrCode.start(nextId, currentConfig || { fps: 10, qrbox: { width: 260, height: 260 } }, onScanSuccess, onScanFailure);
-    }).then(() => { showToast('Kamera gewechselt'); })
+      return html5QrCode.start(
+        nextId,
+        { fps: 10, qrbox: { width: 260, height: 260 } },
+        onScanSuccess,
+        onScanFailure
+      );
+    }).then(() => { showToast('Kamera gewechselt ✅'); })
       .catch(err => { showToast('Kamera-Fehler: ' + (err.message || 'Unbekannt')); });
   }).catch(err => { showToast('Kamera-Fehler: ' + (err.message || 'Unbekannt')); });
 }
