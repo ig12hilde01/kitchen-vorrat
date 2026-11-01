@@ -2170,7 +2170,7 @@ function checkPw() {
   if (hash === PW_HASH) {
     document.getElementById('pw-gate').style.display = 'none';
     localStorage.setItem('kv_pw_auth', 'true');
-    init();
+    if (typeof init === 'function') init();
   } else {
     document.getElementById('pw-error').style.display = 'block';
     document.getElementById('pw-input').value = '';
@@ -2179,8 +2179,14 @@ function checkPw() {
 }
 if (localStorage.getItem('kv_pw_auth') === 'true') {
   document.getElementById('pw-gate').style.display = 'none';
-  init(true); // Skip refreshAll für schnellere Ladezeit
-}</script>
+  // init() wird erst nach Script 3 geladen — verschiebe in DOMContentLoaded
+}
+// init() aufrufen wenn das Script 3 fertig ist
+window.addEventListener('load', function() {
+  if (localStorage.getItem('kv_pw_auth') === 'true') {
+    init(true);
+  }
+});</script>
 <script>
 // ═══════════════════════════════════════════════════════════
 //  DATA LAYER — localStorage management
